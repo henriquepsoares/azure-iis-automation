@@ -43,8 +43,13 @@ location=brazilsouth
 vm=vm-win2022
 image=Win2022AzureEditionCore
 adminUser=henrique
+
+
+
 📦 Resource Group Creation
 az group create -n $rg -l $location
+
+
 🖥️ Virtual Machine Creation
 az vm create \
   -g $rg \
@@ -52,6 +57,8 @@ az vm create \
   --image $image \
   --admin-username $adminUser \
   --admin-password Super202$
+
+
 📋 VM Listing and Details
 az vm list -g $rg
 az vm list -g $rg -o yaml
@@ -59,26 +66,39 @@ az vm list -g $rg -o yaml
 az vm show -g $rg -n $vm
 az vm show -g $rg -n $vm -o yaml
 az vm show -g $rg -n $vm --query "name"
+
+
 🌍 Get Public IP Address
+
+
 az vm show -d -g $rg -n $vm --query publicIps -o tsv
 🔓 Open HTTP Port (80)
 az vm open-port --port 80 -g $rg --name $vm
+
+
 🌐 Connectivity Test
 curl <PUBLIC_IP>
+
 🧩 Install IIS Web Server (Remote PowerShell)
+
 az vm run-command invoke \
   -g $rg \
   -n $vm \
   --command-id RunPowerShellScript \
   --scripts "Install-WindowsFeature -Name Web-Server -IncludeManagementTools"
+
 🎨 Deploy Custom Web Page
+
 az vm run-command invoke \
   -g $rg \
   -n $vm \
   --command-id RunPowerShellScript \
   --scripts 'Set-Content -Path "C:\inetpub\wwwroot\iisstart.htm" -Value "Hello from Azure Virtual Machine!"'
+
 🧹 Environment Cleanup (Optional)
+
 az group delete -n $rg -y
+
 🎯 Final Result
 
 ✅ Automated VM provisioning
